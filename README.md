@@ -1,4 +1,4 @@
-# JWt Example
+# JWT Spring-Boot Example
 
 ## In this example project we have:
 - JWT Authorization Using Spring-Boot 3
