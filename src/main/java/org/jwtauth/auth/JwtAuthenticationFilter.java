@@ -9,7 +9,9 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,6 +26,7 @@ import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 @Component
+@Slf4j
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Value("${application.jwt.secret_key}")
     private String SECRET_KEY;
@@ -32,10 +35,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain)
             throws ServletException, IOException {
+        log.info("Request filter....");
         String authorizationHeader = request.getHeader(AUTHORIZATION);
         if (authorizationHeader!=null && authorizationHeader.startsWith("Bearer "))
         {
+
             try {
+                log.info("Decoding access token");
 
                 //Get token in json header to verify
 
@@ -61,10 +67,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                         = new UsernamePasswordAuthenticationToken(username,null,authorities);
                 SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                 filterChain.doFilter(request,response);
-
+                log.info("Decode access token complete - do filter request with role " +
+                        Arrays.toString(role));
             }catch (Exception e){
-                System.out.println(e.getMessage());
-                response.setHeader("err",e.getMessage());
+                log.info("Decode access token fail");
+                response.setHeader("Error",e.getMessage());
                 response.setStatus(FORBIDDEN.value());
                 Map<String,String> error = new HashMap<>();
                 error.put("error message",e.getMessage());
@@ -73,6 +80,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
         else {
+            log.info("No Request Filter");
             filterChain.doFilter(request,response);
         }
 

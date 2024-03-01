@@ -18,13 +18,15 @@ public class SecurityConfig {
     @Value("${application.api}")
     private String apiPreflix;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable);
-        http.authorizeHttpRequests(auth ->{
-            auth.requestMatchers(apiPreflix+"/admin").hasAuthority("ADMIN");
-            auth.requestMatchers(apiPreflix+"/user").hasAuthority("USER");
-            auth.requestMatchers(apiPreflix+"/auth/login").permitAll();
+        http.authorizeHttpRequests(auth -> {
+            auth.requestMatchers(apiPreflix + "/admin").hasAuthority("ADMIN")
+                    .requestMatchers(apiPreflix + "/user").hasAuthority("USER")
+                    .requestMatchers(apiPreflix + "/auth/login").permitAll().
+                    anyRequest().permitAll();
         });
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         http.httpBasic(AbstractHttpConfigurer::disable);
