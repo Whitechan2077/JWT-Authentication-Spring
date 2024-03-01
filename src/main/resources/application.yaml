@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: "jdbc:sqlserver://localhost:1433;database=jwt;encrypt=true;trustServerCertificate=true"
+    username: "sa"
+    password: "06122004"
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+application:
+    api: "api/v1"
+    jwt:
+      secret_key: "em ganyu mup qua anh em ?*: .?. o(???)o .?.:*?"
+      access_token_expired: 30000
+      refresh_token_expired: 25920000
