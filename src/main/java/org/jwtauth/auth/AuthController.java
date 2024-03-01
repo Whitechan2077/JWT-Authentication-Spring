@@ -16,7 +16,7 @@ public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody AuthRequest authRequest){
+    public ResponseEntity<?> login(@RequestBody AuthDTO.AuthRequest authRequest){
         return authService.doLogin(authRequest);
     }
     @PostMapping("/refresh-token")

@@ -1,6 +1,5 @@
 package org.jwtauth.core.interceptor;
 
-import com.auth0.jwt.exceptions.AlgorithmMismatchException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import lombok.extern.slf4j.Slf4j;
 import org.jwtauth.core.exception.CustomException;

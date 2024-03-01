@@ -15,13 +15,13 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
-    public ResponseEntity<?> doLogin(AuthRequest authRequest){
+    public ResponseEntity<?> doLogin(AuthDTO.AuthRequest authRequest){
         log.info("Login starting ....");
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(),authRequest.getPassword()));
         Users user = (Users) authentication.getPrincipal();
         log.info("Login complete ....");
         return ResponseEntity
-                .ok(AuthResponse
+                .ok(AuthDTO.AuthResponse
                         .builder()
                         .accessToken(jwtService.generateAccessToken(user))
                         .refreshToken(jwtService.generateRefreshToken(user))
